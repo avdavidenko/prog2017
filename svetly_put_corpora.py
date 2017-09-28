@@ -16,7 +16,7 @@ def clean_text (text):
     return
 
 def writing_plain(about_text, title, date, main_text):
-    print (about_text)
+    #print (about_text)
     directory = 'Светлый путь\\plain\\' + date[0][6:10] + '\\' + date[0][3:5] + '\\'
     #print (directory)
     if os.path.exists(directory) == False:
@@ -25,7 +25,7 @@ def writing_plain(about_text, title, date, main_text):
     filename =  title[0] + '.txt'
     #print (filename)
     directory = directory + filename
-    print (directory)
+    #print (directory)
     with open(directory, 'w', encoding = 'utf-8') as f:
           f.write (about_text)
           f.write ('\n')
@@ -37,6 +37,12 @@ def info (text, pageUrl):
         author = ['Noname']
     #print (author)
     title = re.findall('<meta name="title" content="(.*?)" />', text)
+    if title[0].count ('"') > 0:
+        title[0] = title[0].replace('"', '')
+    if title[0].count ('«') > 0:
+        title[0] = title[0].replace('«', '')
+    if title[0].count ('»') > 0:
+        title[0] = title[0].replace('»', '')
     #print (title)
     #topic на странице нет
     regDate = re.compile('<td valign="top" class="createdate">\n\t\t(.*?)\t</td>', re.DOTALL)
@@ -62,8 +68,7 @@ def info (text, pageUrl):
 
 
 def download_page(commonUrl):
-    links = []
-    for i in range(9,919):
+    for i in range(9,19):
         pageUrl = commonUrl + str(i)
         try:
             page = urllib.request.urlopen(pageUrl)
