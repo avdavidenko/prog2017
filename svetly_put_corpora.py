@@ -9,11 +9,19 @@ def clean_text (text):
     regTag = re.compile('<.*?>', re.DOTALL)  # это рег. выражение находит все тэги
     regScript = re.compile('<script>.*?</script>', re.DOTALL) # все скрипты
     regComment = re.compile('<!--.*?-->', re.DOTALL)  # все комментарии
+    regTitle = re.compile ('<td class="contentheading" width="100%">(.*?)</td>', re.DOTALL)
+    regAdm = re.compile ('<span class="small">(.*?)</span>', re.DOTALL)
+    regDate = re.compile ('<td valign="top" class="createdate">\n\t\t(.*?)\t</td>', re.DOTALL)
 #     заменяем ненужные куски на пустую строку
-    clean_t = regScript.sub("", text)
+    clean_t = text.replace ('&nbsp;', '')
+    clean_t = regDate.sub ("", clean_t)
+    clean_t = regTitle.sub ("", clean_t)
+    clean_t = regAdm.sub ("", clean_t)
+    clean_t = regScript.sub("", clean_t)
     clean_t = regComment.sub("", clean_t)
     clean_t = regTag.sub("", clean_t)
-    clean_t = html.unescape(clean_t)
+    print (clean_t)
+#    print(html.unescape(clean_t))
     return clean_t
 
 def tagging (date, filename, main_text):
@@ -22,17 +30,18 @@ def tagging (date, filename, main_text):
         os.makedirs(new_directory)
     new_directory = new_directory + filename
 #    print (new_directory)
-#    print ("mystem.exe " + directory + " " + new_directory)
-    os.system("mystem.exe " + main_text[0] + " " + new_directory)
+#    сложить необработанный текст в файл и дать его майстему на вход. Иначе паймайстем, но это сложно
+    print ("mystem.exe " + 'Светлый путь\\plain\\' + date[0][6:10] + '\\' + date[0][3:5] + '\\' + filename + " " + new_directory)
+    os.system("mystem.exe " + filename + " " + new_directory)
     
-def tagging_xml (date, filename, main_text):
-    new_directory = 'Светлый путь\\mystem-xml\\' + date[0][6:10] + '\\' + date[0][3:5] + '\\'
-    if os.path.exists(new_directory) == False:
-        os.makedirs(new_directory)
-    new_directory = new_directory + filename
+#def tagging_xml (date, filename, main_text):
+#    new_directory = 'Светлый путь\\mystem-xml\\' + date[0][6:10] + '\\' + date[0][3:5] + '\\'
+#    if os.path.exists(new_directory) == False:
+#        os.makedirs(new_directory)
+#    new_directory = new_directory + filename
 #    print (new_directory)
 #    print ("mystem.exe " + "--format xml " + directory + " " + new_directory)
-    os.system("mystem.exe " + "--format xml " + main_text[0] + " " + new_directory)
+#    os.system("mystem.exe " + "--format xml " + main_text[0] + " " + new_directory)
 
 def writing_plain(about_text, title, date, main_text):
 #    print (about_text[0])
@@ -49,11 +58,11 @@ def writing_plain(about_text, title, date, main_text):
           f.write (about_text)
           f.write ('\n')
           if  len(main_text) > 0:
-              f.write (main_text[0])
+              f.write (clean_text(main_text[0]))
           else:
               print ('Main text = 0')
     tagging (date, filename, main_text)
-    tagging_xml (date, filename, main_text)
+#    tagging_xml (date, filename, main_text)
     return
 
 def csv_info (directory, author, title, date, pageUrl):
@@ -66,6 +75,7 @@ def info (text, pageUrl):
         author = ['Noname']
 #    print (author)
     title = re.findall('<meta name="title" content="(.*?)" />', text)
+#    print (title)
     if title[0].count ('"') > 0:
         title[0] = title[0].replace('"', '')
     if title[0].count ('«') > 0:
@@ -100,28 +110,34 @@ def info (text, pageUrl):
         title[0] = title[0].replace ('/', '_')
     if title[0].count ("'") > 0:
         title[0] = title[0].replace ("'", "_")
-    title[0] = html.unescape(title[0])
-#    print (title)
+#    title[0] = html.unescape(title[0])
+#    print (title[0])
 #    topic на странице нет
     regDate = re.compile('<td valign="top" class="createdate">\n\t\t(.*?)\t</td>', re.DOTALL)
     date = regDate.findall(text)
 #    print (date)
 #    текст статьи находится не вeзде (см., например, 106)
-    main_text = re.findall ('<p>(.*?)</p>', text)
-    regMain = re.compile ('<tr><td valign="top">(.*?)<!-- START of joscomment --><!-- END of joscomment --></td>', re.DOTALL)
-    main_text2 = regMain.findall (text)
-    if (len(main_text2) > 0) and (len (main_text[0]) < len (main_text2[0])):
-       main_text[0] = main_text2[0] 
-#    print (main_text[0])
-    main_text[0] = clean_text (main_text[0])
+#    на крайняк чистить все, кроме русского текста, даже если это не везде статья. Убрать скрипты, убрать теги
+#    обратить внимание на <table class="contentpaneopen"> Сначала заголовок, потом текст
+#    main_text = re.findall ('<p>(.*?)</p>', text)
+#    regMain = re.compile ('<tr><td valign="top">(.*?)<!-- START of joscomment --><!-- END of joscomment --></td>', re.DOTALL)
+#    main_text2 = regMain.findall (text)
+#    if (len(main_text2) > 0) and (len (main_text[0]) < len (main_text2[0])):
+#       main_text[0] = main_text2[0]
+    regMain = re.compile('<table class="contentpaneopen">(.*?)<!-- START of joscomment -->', re.DOTALL)
+    main_text = regMain.findall (text)
+#    print (main_text)
+#    main_text[0] = clean_text (main_text[0])
 #    print (main_text[0])
     about_text = '@au ' + author[0] + '\n@ti ' + title[0] + '\n@da ' + date[0][:10] + '\n@url ' + pageUrl
 #    print (about_text)
+    print (about_text)
+#    print (main_text[0], '\n')
 #    print ('\n', main_text[0])
 #    article = '@au ' + author[0] + '\n@ti ' + title[0] + '\n@da ' + date[0] + '\n@url ' + pageUrl + '\n' + main_text[0]
 #    print (article)
     if len(main_text) > 0:
-        main_text[0] = html.unescape(main_text[0])
+#        main_text[0] = html.unescape(main_text[0])
         writing_plain (about_text, title, date, main_text)
     return  
 
@@ -133,7 +149,7 @@ def info (text, pageUrl):
 
 
 def download_page(commonUrl):
-    for i in range(13,23): # 9 919
+    for i in range(14,15): # 9 919
         pageUrl = commonUrl + str(i)
         tryNumber = 0
         succeed = False
