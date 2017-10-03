@@ -12,6 +12,7 @@ def clean_text (text):
     regTitle = re.compile ('<td class="contentheading" width="100%">(.*?)</td>', re.DOTALL)
     regAdm = re.compile ('<span class="small">(.*?)</span>', re.DOTALL)
     regDate = re.compile ('<td valign="top" class="createdate">\n\t\t(.*?)\t</td>', re.DOTALL)
+    regSpace = re.compile('\s+', re.DOTALL)
 #     заменяем ненужные куски на пустую строку
     clean_t = text.replace ('&nbsp;', '')
     clean_t = regDate.sub ("", clean_t)
@@ -20,19 +21,20 @@ def clean_text (text):
     clean_t = regScript.sub("", clean_t)
     clean_t = regComment.sub("", clean_t)
     clean_t = regTag.sub("", clean_t)
-    print (clean_t)
+    clean_t = regSpace.sub(' ', clean_t) 
+#    print (clean_t)
 #    print(html.unescape(clean_t))
     return clean_t
 
-def tagging (date, filename, main_text):
-    new_directory = 'Светлый путь\\mystem-plain\\' + date[0][6:10] + '\\' + date[0][3:5] + '\\'
-    if os.path.exists(new_directory) == False:
-        os.makedirs(new_directory)
-    new_directory = new_directory + filename
+#def tagging (date, filename, main_text):
+#    new_directory = 'Светлый путь\\mystem-plain\\' + date[0][6:10] + '\\' + date[0][3:5] + '\\'
+#    if os.path.exists(new_directory) == False:
+#        os.makedirs(new_directory)
+#    new_directory = new_directory + filename
 #    print (new_directory)
 #    сложить необработанный текст в файл и дать его майстему на вход. Иначе паймайстем, но это сложно
-    print ("mystem.exe " + 'Светлый путь\\plain\\' + date[0][6:10] + '\\' + date[0][3:5] + '\\' + filename + " " + new_directory)
-    os.system("mystem.exe " + filename + " " + new_directory)
+#    print ("mystem.exe " + 'Светлый путь\\plain\\' + date[0][6:10] + '\\' + date[0][3:5] + '\\' + filename + " " + new_directory)
+#    os.system("mystem.exe " + filename + " " + new_directory)
     
 #def tagging_xml (date, filename, main_text):
 #    new_directory = 'Светлый путь\\mystem-xml\\' + date[0][6:10] + '\\' + date[0][3:5] + '\\'
@@ -61,7 +63,7 @@ def writing_plain(about_text, title, date, main_text):
               f.write (clean_text(main_text[0]))
           else:
               print ('Main text = 0')
-    tagging (date, filename, main_text)
+#    tagging (date, filename, main_text)
 #    tagging_xml (date, filename, main_text)
     return
 
@@ -75,7 +77,7 @@ def info (text, pageUrl):
         author = ['Noname']
 #    print (author)
     title = re.findall('<meta name="title" content="(.*?)" />', text)
-#    print (title)
+#    print (title[0])
     if title[0].count ('"') > 0:
         title[0] = title[0].replace('"', '')
     if title[0].count ('«') > 0:
@@ -110,20 +112,15 @@ def info (text, pageUrl):
         title[0] = title[0].replace ('/', '_')
     if title[0].count ("'") > 0:
         title[0] = title[0].replace ("'", "_")
+    regSpace = re.compile('\s+', re.DOTALL)
+    title[0] = regSpace.sub(' ', title[0])
 #    title[0] = html.unescape(title[0])
-#    print (title[0])
+    print (pageUrl)
+    print (title[0])
 #    topic на странице нет
     regDate = re.compile('<td valign="top" class="createdate">\n\t\t(.*?)\t</td>', re.DOTALL)
     date = regDate.findall(text)
 #    print (date)
-#    текст статьи находится не вeзде (см., например, 106)
-#    на крайняк чистить все, кроме русского текста, даже если это не везде статья. Убрать скрипты, убрать теги
-#    обратить внимание на <table class="contentpaneopen"> Сначала заголовок, потом текст
-#    main_text = re.findall ('<p>(.*?)</p>', text)
-#    regMain = re.compile ('<tr><td valign="top">(.*?)<!-- START of joscomment --><!-- END of joscomment --></td>', re.DOTALL)
-#    main_text2 = regMain.findall (text)
-#    if (len(main_text2) > 0) and (len (main_text[0]) < len (main_text2[0])):
-#       main_text[0] = main_text2[0]
     regMain = re.compile('<table class="contentpaneopen">(.*?)<!-- START of joscomment -->', re.DOTALL)
     main_text = regMain.findall (text)
 #    print (main_text)
@@ -131,13 +128,28 @@ def info (text, pageUrl):
 #    print (main_text[0])
     about_text = '@au ' + author[0] + '\n@ti ' + title[0] + '\n@da ' + date[0][:10] + '\n@url ' + pageUrl
 #    print (about_text)
-    print (about_text)
-#    print (main_text[0], '\n')
-#    print ('\n', main_text[0])
-#    article = '@au ' + author[0] + '\n@ti ' + title[0] + '\n@da ' + date[0] + '\n@url ' + pageUrl + '\n' + main_text[0]
-#    print (article)
-    if len(main_text) > 0:
-#        main_text[0] = html.unescape(main_text[0])
+    Udmurt = False
+    if main_text[0].count ('Ӝ') > 0:
+        Udmurt = True
+    elif main_text[0].count('ӝ') > 0:
+        Udmurt = True
+    elif main_text[0].count('Ӟ') > 0:
+        Udmurt = True
+    elif main_text[0].count('ӟ') > 0:
+        Udmurt = True
+    elif main_text[0].count('Ӥ') > 0:
+        Udmurt = True
+    elif main_text[0].count('ӥ') > 0:
+        Udmurt = True
+    elif main_text[0].count('Ӧ') > 0:
+        Udmurt = True
+    elif main_text[0].count('ӧ') > 0:
+        Udmurt = True
+    elif main_text[0].count('Ӵ') > 0:
+        Udmurt = True
+    elif main_text[0].count('ӵ') > 0:
+        Udmurt = True            
+    if len(main_text) > 0 and Udmurt == False:
         writing_plain (about_text, title, date, main_text)
     return  
 
@@ -149,11 +161,11 @@ def info (text, pageUrl):
 
 
 def download_page(commonUrl):
-    for i in range(14,15): # 9 919
+    for i in range(9,919): # 9 919
         pageUrl = commonUrl + str(i)
         tryNumber = 0
         succeed = False
-        while succeed == False and tryNumber < 1:
+        while succeed == False and tryNumber < 5:
             try:
                 page = urllib.request.urlopen(pageUrl)
                 text = page.read().decode('utf-8')
@@ -162,15 +174,19 @@ def download_page(commonUrl):
 #                clean_text (text)
                 succeed = True
             except urllib.error.HTTPError:
+                tryNumber += 3
+#                time.sleep(2)
+            except urllib.error.URLError:
                 tryNumber += 1
-                time.sleep(1)
+                time.sleep (2)
             except:
                 raise
                 tryNumber += 1
-                time.sleep(1)
+                time.sleep(2)
 
         if succeed == False:
             print('Error at', pageUrl)
       
 commonUrl = 'http://svetly-put.ru/index.php?option=com_content&view=article&id='
 download_page(commonUrl)
+print ('The end')
