@@ -4,6 +4,10 @@ import os
 import time
 import csv
 
+#ДОПИШИ УЖЕ СЧЕТЧИК СЛОВ
+#ПОЧИСТЬ ОТ ПРОБЕЛОВ В НАЧАЛЕ И В КОНЦЕ
+#ПОДЕЛИ НА НОРМАЛЬНЫЕ ФУНКЦИИ
+
 def clean_text (text):
     html_content = '<html>....</html>'  # тут какой-то html
     regTag = re.compile('<.*?>', re.DOTALL)  # это рег. выражение находит все тэги
@@ -99,6 +103,9 @@ def translit (title):
     for i, j in latin.items():
         title[0] = title[0].replace(i, j)
 #    print(title[0])
+
+def count_text
+    
     
 def tagging (date, filename, main_text, directory):
     new_directory = 'Svetly_Put\\mystem-plain\\' + date[0][6:10] + '\\' + date[0][3:5] + '\\'
@@ -243,7 +250,7 @@ def info (text, pageUrl):
 
 
 def download_page(commonUrl):
-    for i in range(40,60): # 9 919
+    for i in range(9,919): # 9 919
         pageUrl = commonUrl + str(i)
         tryNumber = 0
         succeed = False
