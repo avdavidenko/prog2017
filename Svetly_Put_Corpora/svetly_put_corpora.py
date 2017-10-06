@@ -56,13 +56,6 @@ def clean_title (title):
     title[0].strip(title[0])
     return title
 
-def count_text (main_text):
-    words = main_text[0].count (' ') + 1
-    count_file = 'count_file.csv'
-    with open (count_file, "a", newline = "") as file:
-        writer = csv.writer(file, delimiter = '\t')
-        writer.writerows([[words]])
-
 def replace_by_table(title):
     converted = ""
     for ch in title[0]:
@@ -74,14 +67,14 @@ def tagging (date, filename, main_text, directory):
     if os.path.exists(new_directory) == False:
         os.makedirs(new_directory)
     new_directory = new_directory + filename
-    os.system(r"mystem.exe " + "-dc " + directory + " " + new_directory)
+    os.system(r"mystem.exe " + "-idc " + directory + " " + new_directory)
    
 def tagging_xml (date, filename, main_text, directory):
     new_directory = 'Svetly_Put\\mystem-xml\\' + date[0][6:10] + '\\' + date[0][3:5] + '\\'
     if os.path.exists(new_directory) == False:
         os.makedirs(new_directory)
     new_directory = new_directory + filename
-    os.system(r"mystem.exe " + "--format xml -d " + directory + " " + new_directory)
+    os.system(r"mystem.exe " + "--format xml -id " + directory + " " + new_directory)
 
 def writing_plain(about_text, title, date, main_text, author, pageUrl):
     directory = 'Svetly_Put\\plain\\' + date[0][6:10] + '\\' + date[0][3:5] + '\\'
@@ -100,7 +93,6 @@ def writing_plain(about_text, title, date, main_text, author, pageUrl):
     tagging (date, filename, main_text, directory)
     tagging_xml (date, filename, main_text, directory)
     main_text[0] = clean_text(main_text[0])
-    count_text (main_text)
     with open(directory, 'w', encoding = 'utf-8') as f:
           if  len(main_text) > 0:
               f.write (about_text)
@@ -155,8 +147,8 @@ def info (text, pageUrl):
     return  
 
 def download_page(commonUrl):
-    for i in range(9,919): # 9 919
-        print ('article: ', i)
+    for i in range(9,12): # 9 919
+#        print ('article: ', i)
         pageUrl = commonUrl + str(i)
         tryNumber = 0
         succeed = False
@@ -266,7 +258,7 @@ replacement_table = {' ':'_',
 
 commonUrl = 'http://svetly-put.ru/index.php?option=com_content&view=article&id='
 download_page(commonUrl)
-print ('The end')
+#print ('The end')
 
 
     
