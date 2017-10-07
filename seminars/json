@@ -1,0 +1,24 @@
+import json
+import urllib.request
+
+users = ["elmiram", "nevmenandr", "shwars", "JelteF", "timgraham", "arogozhnikov", "jasny", "bcongdon", "whyisjake"]  # пользователь, про которого мы хотим что-то узнать
+languages = {}
+for user in users:
+    print(user)
+    url = 'https://api.github.com/users/%s/repos' % user  
+# по этой ссылке мы будем доставать джейсон, попробуйте вставить ссылку в браузер и посмотреть, что там
+    req = urllib.request.Request(url)
+    req.add_header("Authorization", "token badee4f2376f21d4ee7d8d7617f9fd97b811701f")
+    result = urllib.request.urlopen(req)  # посылаем серверу запрос и достаем ответ
+    text = result.read().decode('utf-8')  # читаем ответ в строку
+    data = json.loads(text) # превращаем джейсон-строку в объекты питона
+#for i in data:
+#    print(i["name"]) # и распечатать названия всех репозиториев
+#    print(i["description"])
+#    print(i["language"])
+    for j in data:
+        if j["language"] not in languages:
+            languages[j["language"]] = 1
+        else:
+            languages[j["language"]] += 1
+    print (languages)
