@@ -8,7 +8,7 @@ for user in users:
     url = 'https://api.github.com/users/%s/repos' % user  
 # по этой ссылке мы будем доставать джейсон, попробуйте вставить ссылку в браузер и посмотреть, что там
     req = urllib.request.Request(url)
-    req.add_header("Authorization", "token badee4f2376f21d4ee7d8d7617f9fd97b811701f")
+    req.add_header("Authorization", "token 934eb8de1278b3b04c4a7c173909b90be91d9cd4")
     result = urllib.request.urlopen(req)  # посылаем серверу запрос и достаем ответ
     text = result.read().decode('utf-8')  # читаем ответ в строку
     data = json.loads(text) # превращаем джейсон-строку в объекты питона
