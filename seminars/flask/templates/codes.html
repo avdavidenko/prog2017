@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Список кодов языков</title>
+</head>
+<body>
+<ul>
+    {% for code in langs.keys() %}
+		{% if code[0:name|length] == name %}
+			<li>{{ langs.get(code) }} - {{ code }}</li>
+		{% endif %}
+    {% endfor %}
+</ul>
+</body>
+</html>
