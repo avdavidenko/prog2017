@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Главная страница</title>
+</head>
+<body>
+<h1>Заполните, пожалуйста, анкету:</h1>
+<form action="" method="post" name="questions">
+    <p>
+        0. Ваш язык:<br>
+        {{form.lang}}<br>
+    </p>
+	<p>
+        1. я:<br>
+        {{form.word1}}<br>
+    </p>
+    <p>
+        2. ты:<br>
+        {{form.word2}}<br>
+    </p>
+    <p>
+        3. он:<br>
+        {{form.word3}}<br>
+    </p>
+    <p>
+        4. мы:<br>
+        {{form.word4}}<br>
+    </p>
+    <p>
+        5. они:<br>
+        {{form.word5}}<br>
+    </p>
+    <p>
+        6. этот:<br>
+        {{form.word6}}<br>
+    </p>
+    <p>
+        7. тот:<br>
+        {{form.word7}}<br>
+    </p>
+    <p>
+        8. здесь:<br>
+        {{form.word8}}<br>
+    </p>
+    <p>
+        9. там:<br>
+        {{form.word9}}<br>
+    </p>
+    <p>
+        10. кто:<br>
+        {{form.word10}}<br>
+    </p>
+    <p><input type="submit" value="Отправить"></p>
+</form>
+<p> Вот здесь тоже интересно: </p>
+<ul>
+    {% for name, url in urls.items() %}
+    <li><a href="{{ url }}">{{ name }}</a></li>
+    {% endfor %}
+</ul>
+</body>
+</html>

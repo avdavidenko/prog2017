@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Спасибо за ответ!</title>
+</head>
+<body>
+<h1>Спасибо за прохождение анкеты!</h1>
+<p>Если хотите, можете заглянуть вот сюда:</p>
+<ul>
+    {% for name, url in urls.items() %}
+    <li><a href="{{ url }}">{{ name }}</a></li>
+    {% endfor %}
+</ul>
+</body>
+</html>

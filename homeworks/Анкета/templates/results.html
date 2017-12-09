@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Результаты поиска</title>
+</head>
+<body>
+<h1>Результаты поиска:</h1>
+<p> {{search_res}} </p>
+<p> Вот здесь тоже интересно: </p>
+<ul>
+    {% for name, url in urls.items() %}
+    <li><a href="{{ url }}">{{ name }}</a></li>
+    {% endfor %}
+</ul>
+</body>
+</html>

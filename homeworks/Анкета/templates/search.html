@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Поиск</title>
+</head>
+<body>
+<h1>Здесь можно найти информацию по результатам:</h1>
+<form action="" method="post" name="searchlang">
+	<p> 
+		Здесь можно искать по языку: <br>
+		{{form_lang.inp_lang}}
+	</p>
+	<p><input type="submit" value="Отправить"></p>
+</form>
+<form action="" method="post" name="searchid">
+	<p> 
+		Здесь можно искать по id информатора: <br>
+		{{form_id.inp_id}}
+	</p>
+	<p><input type="submit" value="Отправить"></p>
+</form>
+<p> Вот здесь тоже интересно: </p>
+<ul>
+    {% for name, url in urls.items() %}
+    <li><a href="{{ url }}">{{ name }}</a></li>
+    {% endfor %}
+</ul>
+</body>
+</html>
