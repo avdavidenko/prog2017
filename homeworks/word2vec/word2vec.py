@@ -32,7 +32,6 @@ def create_edges (model, words, graph):
                 j += 1
     return graph
 
-## визуализацию не просили, но пускай остается
 ##def visualisation (graph):
 ##    pos=nx.spring_layout(graph)
 ##    nx.draw_networkx_nodes(graph, pos, node_color='blue', node_size=50)
@@ -60,19 +59,27 @@ def radius (graph):
     try:
         print('radius:\t', nx.radius(graph))
     except nx.exception.NetworkXError:
-        print('graph is not connected')
+        components = find_components (graph)
+        for component in components:
+            sub = graph.subgraph (component)
+            print (component, '\nradius:\t', nx.radius(sub))
     return
 
 def clustering (graph):
     print('clustering:\t', nx.average_clustering(graph))
     return
+
+def find_components (graph):
+    components = nx.connected_components(graph)
+    return components
     
 model = 'ruscorpora_upos_skipgram_300_5_2018.vec.gz'
 model = open_model (model)
-words = ['кот_NOUN', 'кошка_NOUN', 'котенок_NOUN', 'кота_NOUN', 'котенка_NOUN', 'котяра_NOUN', 'мыш_NOUN', 'пес_NOUN', 'котище_NOUN', 'дворняга_NOUN', 'кошечка_NOUN', 'собака_NOUN', 'волкодав_NOUN', 'дворняга_NOUN', 'овчарка_NOUN', 'собачонка_NOUN', 'дворняжка_NOUN', 'кобель_NOUN', 'щенок_NOUN', 'сенбернар_NOUN', 'песятина_NOUN']
+words = ['кот_NOUN', 'кошка_NOUN', 'котенок_NOUN', 'кота_NOUN', 'котенка_NOUN', 'котяра_NOUN', 'мыш_NOUN', 'пес_NOUN', 'котище_NOUN', 'дворняга_NOUN', 'кошечка_NOUN', 'собака_NOUN', 'волкодав_NOUN', 'дворняга_NOUN', 'овчарка_NOUN', 'собачонка_NOUN', 'дворняжка_NOUN', 'кобель_NOUN', 'щенок_NOUN', 'сенбернар_NOUN', 'песятина_NOUN', 'клубника_NOUN', 'земляника_NOUN', 'малина_NOUN', 'смородина_NOUN']
 graph = create_nodes (words)
 graph = create_edges(model, words, graph)
 center (graph)
 radius (graph)
 clustering (graph)
+find_components (graph)
 ##visualisation (graph)
