@@ -32,14 +32,15 @@ def create_edges (model, words, graph):
                 j += 1
     return graph
 
-def visualisation (graph):
-    pos=nx.spring_layout(graph)
-    nx.draw_networkx_nodes(graph, pos, node_color='blue', node_size=50)
-    nx.draw_networkx_edges(graph, pos, edge_color='yellow')
-    nx.draw_networkx_labels(graph, pos, font_size=16, font_family='Arial')
-    plt.axis('off')
-    plt.show()
-    return
+## визуализацию не просили, но пускай остается
+##def visualisation (graph):
+##    pos=nx.spring_layout(graph)
+##    nx.draw_networkx_nodes(graph, pos, node_color='blue', node_size=50)
+##    nx.draw_networkx_edges(graph, pos, edge_color='yellow')
+##    nx.draw_networkx_labels(graph, pos, font_size=16, font_family='Arial')
+##    plt.axis('off')
+##    plt.show()
+##    return
 
 def center (graph):
     deg = nx.degree_centrality(graph)
@@ -74,4 +75,4 @@ graph = create_edges(model, words, graph)
 center (graph)
 radius (graph)
 clustering (graph)
-visualisation (graph)
+##visualisation (graph)
